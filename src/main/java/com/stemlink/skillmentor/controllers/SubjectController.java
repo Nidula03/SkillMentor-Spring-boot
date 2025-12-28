@@ -1,13 +1,16 @@
 package com.stemlink.skillmentor.controllers;
+
 import com.stemlink.skillmentor.dto.SubjectDTO;
 import com.stemlink.skillmentor.entities.Subject;
 import com.stemlink.skillmentor.services.SubjectService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+
+
 import java.util.List;
 
 
@@ -26,51 +29,32 @@ public class SubjectController {
 
 
     @GetMapping
-    public List<Subject> getAllSubjects(@RequestParam(name = "name",defaultValue = "all")String name){
-//        String result = subjects.toString();
-//        System.out.println(result);
-
+    public List<Subject> getAllSubjects(){
         return subjectService.getAllSubjects();
     }
 //
-//    @GetMapping("{id}")
-//    public String getSubjectById(
-//            @PathVariable int id){
-//        System.out.println("Get by ID" + id);
-//        return subjects.get(id);
-//    }
-
-
-    @PostMapping()
-    public Subject createSubject(@Validated @RequestBody SubjectDTO subjectDTO){
-//        if(subject.getSubjectName().length() > 20){
-//            Subject errorSubject = new Subject();
-//            errorSubject.setSubjectName("");
-//            errorSubject.setDescription("");
-//            return errorSubject;
-//        }
-//        //mapping object to subject
-//        Subject subject = new Subject();
-//        subject.setSubjectName(subjectDTO.getSubjectName());
-//        subject.setDescription(subjectDTO.getDescription());
-
-        Subject subject = modelMapper.map(subjectDTO, Subject.class);
-        return subjectService.addNewSubject(subject);
-
+    @GetMapping("{id}")
+    public Subject getSubjectById(@PathVariable Long id){
+        return subjectService.getSubjectById(id);
     }
 
-//    @PutMapping("{id}")
-//    public String updateMapping(@RequestBody String updateSubject  ){
-//        System.out.println("Put " + updateSubject);
-//        return "Update all subjects";
-//    }
 
-//    @DeleteMapping("{id}")
-//    public String deleteSubject(@PathVariable int id){
-//        System.out.println("Delete");
-//        subjects.remove(id);
-//        return subjects.toString();
-//    }
+    @PostMapping
+    public Subject createSubject(@Valid @RequestBody SubjectDTO subjectDTO) {
+        Subject subject = modelMapper.map(subjectDTO, Subject.class);
+        return subjectService.addNewSubject(subjectDTO.getMentorId(), subject);
+    }
+
+    @PutMapping("{id}")
+    public Subject updateSubject(@PathVariable Long id, @RequestBody SubjectDTO updatedSubjectDTO) {
+        Subject subject = modelMapper.map(updatedSubjectDTO, Subject.class);
+        return subjectService.updateSubjectById(id, subject);
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteSubject(@PathVariable Long id) {
+        subjectService.deleteSubject(id);
+    }
 
 
 }
