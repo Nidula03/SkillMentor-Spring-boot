@@ -27,7 +27,8 @@ public class MentorServiceImpl implements MentorService {
         try{
             return mentorRepository.save(mentor);
         }catch (Exception exception){
-            System.err.println("Error creating mentor " + exception.getMessage());
+            log.error("Failed to create new mentor",exception);
+            //System.err.println("Error creating mentor " + exception.getMessage());
             throw new SkillMentorException("Failed to create new member", HttpStatus.CONFLICT);
         }
 
