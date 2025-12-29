@@ -1,15 +1,12 @@
 package com.stemlink.skillmentor.dto;
 
-
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
-
 
 @Data
 public class SubjectDTO {
 
-    @NotNull(message = "Cannot be null")
+    @NotNull(message = "cannot be null")
     @Size(min = 5, message = "Subject must be at least 5 characters long")
     private String subjectName;
 

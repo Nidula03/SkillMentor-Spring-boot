@@ -6,38 +6,38 @@ import com.stemlink.skillmentor.services.SubjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-
-
 import java.util.List;
-
-
 
 @RestController
 @RequestMapping(path = "/api/v1/subjects")
 @RequiredArgsConstructor
-
 public class SubjectController {
 
     private final ModelMapper modelMapper;
-
     private final SubjectService subjectService;
 
-    //Mock database
-
-
     @GetMapping
-    public List<Subject> getAllSubjects(){
+    public List<Subject> getAllSubjects() {
         return subjectService.getAllSubjects();
     }
-//
+
     @GetMapping("{id}")
-    public Subject getSubjectById(@PathVariable Long id){
+    public Subject getSubjectById(@PathVariable Long id) {
         return subjectService.getSubjectById(id);
     }
 
+//    @PostMapping
+//    public Subject createSubject(@Valid @RequestBody Subject subject) {
+//        Long mentorId = 1L;
+//
+//        // check validation
+//        if(subject.getSubjectName().length() < 3){
+//            return null;
+//        }
+//        return subjectService.addNewSubject(mentorId, subject);
+//    }
 
     @PostMapping
     public Subject createSubject(@Valid @RequestBody SubjectDTO subjectDTO) {
@@ -55,6 +55,4 @@ public class SubjectController {
     public void deleteSubject(@PathVariable Long id) {
         subjectService.deleteSubject(id);
     }
-
-
 }

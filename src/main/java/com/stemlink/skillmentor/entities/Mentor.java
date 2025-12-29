@@ -1,12 +1,12 @@
 package com.stemlink.skillmentor.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 
 import java.util.Date;
 import java.util.List;
@@ -16,17 +16,16 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "mentor")
 @Data
-
 public class Mentor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name",length = 50,nullable = false)
+    @Column(name = "first_name", length = 50, nullable = false)
     private String firstName;
 
-    @Column(name = "last_name",length = 50,nullable = false)
+    @Column(name = "last_name", length = 50, nullable = false)
     private String lastName;
 
     @Column(length = 100, unique = true, nullable = false)
@@ -51,7 +50,7 @@ public class Mentor {
     private String bio;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false,updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
 
     @UpdateTimestamp
@@ -60,5 +59,9 @@ public class Mentor {
 
     @OneToMany(mappedBy = "mentor")
     private List<Subject> subjects;
+
+    @OneToMany(mappedBy = "mentor")
+    private List<Session> sessions;
+
 
 }
