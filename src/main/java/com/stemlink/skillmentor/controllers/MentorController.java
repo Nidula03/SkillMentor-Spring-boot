@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,32 +19,29 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/mentors")
 @RequiredArgsConstructor
 @Validated
-
-public class MentorController  extends AbstractController{
+public class MentorController extends AbstractController {
 
     private final MentorService mentorService;
     private final ModelMapper modelMapper;
 
-
     @GetMapping
-    public ResponseEntity<Page<Mentor>> getAllMentors(Pageable pageable ) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Page<Mentor>> getAllMentors(Pageable pageable) {
         Page<Mentor> mentors = mentorService.getAllMentors(pageable);
         return sendOkResponse(mentors);
     }
 
-
     @GetMapping("{id}")
     public ResponseEntity<Mentor> getMentorById(@PathVariable Long id) {
         Mentor mentor = mentorService.getMentorById(id);
-        return sendCreatedResponse(mentor);
-
+        return sendOkResponse(mentor);
     }
 
-
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'MENTOR')")
     public ResponseEntity<Mentor> createMentor(@Valid @RequestBody MentorDTO mentorDTO) {
         Mentor mentor = modelMapper.map(mentorDTO, Mentor.class);
-        Mentor  createdMentor = mentorService.createNewMentor(mentor);
+        Mentor createdMentor = mentorService.createNewMentor(mentor);
 
         return sendCreatedResponse(createdMentor);
     }
@@ -51,9 +49,8 @@ public class MentorController  extends AbstractController{
     @PutMapping("{id}")
     public ResponseEntity<Mentor> updateMentor(@PathVariable Long id, @Valid @RequestBody MentorDTO updatedMentorDTO) {
         Mentor mentor = modelMapper.map(updatedMentorDTO, Mentor.class);
-        Mentor updateMentor = mentorService.updateMentorById(id, mentor);
-
-        return sendCreatedResponse(updateMentor);
+        Mentor updatedMentor = mentorService.updateMentorById(id, mentor);
+        return sendOkResponse(updatedMentor);
 
     }
 
@@ -62,7 +59,4 @@ public class MentorController  extends AbstractController{
         mentorService.deleteMentor(id);
         return sendNoContentResponse();
     }
-
-
-
 }
