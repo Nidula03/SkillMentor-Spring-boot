@@ -21,6 +21,10 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+
+    @Column(name = "student_id", length = 100, nullable = false)   //Generic convention
+    private String studentId;
+
     @Column(length = 100, unique = true, nullable = false)
     private String email;
 
